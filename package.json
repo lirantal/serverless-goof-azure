@@ -1,0 +1,15 @@
+{
+  "name": "serverless-goof",
+  "version": "1.0.0",
+  "description": "Oreilly's Serverless security example application",
+  "scripts": {
+    "test": "echo \"No tests yet...\""
+  },
+  "author": "Liran Tal",
+  "dependencies": {
+    "humanize-ms": "^1.2.1",
+    "mongodb": "3.1.10",
+    "ms": "^2.1.2",
+    "uuid": "^3.3.2"
+  }
+}
