@@ -1,16 +1,63 @@
-module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+"use strict";
 
-    if (req.query.name || (req.body && req.body.name)) {
+const MongoClient = require("mongodb").MongoClient;
+const config = require("../config");
+
+const MongoURL = config.db.url;
+
+module.exports = function(context, req) {
+  context.log("GetTodos function invoked");
+
+  MongoClient.connect(
+    MongoURL,
+    {
+      auth: {
+        user: config.db.username,
+        password: config.db.password
+      }
+    },
+    function(error, conn) {
+      if (error) {
+        context.log("error connecting to database");
+        context.log(error);
+
         context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: "Hello " + (req.query.name || req.body.name)
+          status: 500,
+          body: {
+            error: JSON.stringify(error.message),
+            trace: JSON.stringify(error.stack)
+          }
         };
+        return context.done();
+      }
+
+      context.log("Connected successfully to server");
+
+      const itemId = context.req.params["id"];
+
+      const db = conn.db("todos");
+      const coll = db.collection("todos");
+      coll.findOne({ id: itemId }, function(error, data) {
+        if (error) {
+          context.log("error getting todo item");
+          context.log(error.message);
+
+          context.res = {
+            status: 500,
+            body: {
+              error: JSON.stringify(error.message),
+              trace: JSON.stringify(error.stack)
+            }
+          };
+          return context.done();
+        } else {
+          context.res = {
+            status: 200,
+            body: data
+          };
+          return context.done();
+        }
+      });
     }
-    else {
-        context.res = {
-            status: 400,
-            body: "Please pass a name on the query string or in the request body"
-        };
-    }
+  );
 };
