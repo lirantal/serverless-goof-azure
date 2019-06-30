@@ -8,7 +8,7 @@ const fs = require("fs");
 const MongoClient = require("mongodb").MongoClient;
 const config = require("../config");
 
-const MongoURL = `mongodb://${config.db.url}/${config.db.name}`;
+const MongoURL = config.db.url;
 
 module.exports = function(context, req) {
   context.log("CreateTodos function invoked");
@@ -42,10 +42,10 @@ module.exports = function(context, req) {
   MongoClient.connect(
     MongoURL,
     {
-      user: encodeURIComponent(config.db.cosmosdbname),
-      pass: encodeURIComponent(config.db.key),
-      ssl: true,
-      sslValidate: false
+      auth: {
+        user: config.db.username,
+        password: config.db.password
+      }
     },
     function(error, conn) {
       context.log("Connected successfully to server");
@@ -87,7 +87,6 @@ module.exports = function(context, req) {
               body: data
             };
 
-            db.close();
             return context.done();
           }
         });

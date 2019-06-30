@@ -3,7 +3,7 @@
 const MongoClient = require("mongodb").MongoClient;
 const config = require("../config");
 
-const MongoURL = `mongodb://${config.db.url}/${config.db.name}`;
+const MongoURL = config.db.url;
 
 module.exports = function(context, req) {
   context.log("ListTodos function invoked");
@@ -11,11 +11,10 @@ module.exports = function(context, req) {
   MongoClient.connect(
     MongoURL,
     {
-      user: config.db.cosmosdbname,
-      pass: config.db.key,
-      ssl: true,
-      sslValidate: false,
-      poolSize: 1
+      auth: {
+        user: config.db.username,
+        password: config.db.password
+      }
     },
     function(error, conn) {
       if (error) {
@@ -25,7 +24,7 @@ module.exports = function(context, req) {
         context.res = {
           status: 500,
           body: {
-            error: JSON.stringify(message),
+            error: JSON.stringify(error.message),
             trace: JSON.stringify(error.stack)
           }
         };
@@ -56,8 +55,6 @@ module.exports = function(context, req) {
             status: 200,
             body: data
           };
-
-          db.close();
           return context.done();
         }
       });
