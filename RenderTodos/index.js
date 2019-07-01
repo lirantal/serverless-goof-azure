@@ -87,19 +87,19 @@ module.exports = function(context, req) {
               // Interpret the EJS template server side to produce HTML content
               context.log("data:" + JSON.stringify(resultListTodos));
               // Prepare the dust template (really should be stored ahead of time...)
-              var compiled = dust.compile(data.toString(), "dustTemplate");
+              const compiled = dust.compile(data.toString(), "dustTemplate");
               dust.loadSource(compiled);
 
               // Parse the query string
-              var params = qs.parse(context.req.query);
-              context.log("Parsed parameters: " + JSON.stringify(params));
+              const query = qs.parse(context.req.query);
+              context.log("Parsed parameters: " + JSON.stringify(query));
               // Invoke the template
               dust.render(
                 "dustTemplate",
                 {
                   title: "Goof TODO",
                   subhead: "Vulnerabilities at their best",
-                  device: params.device,
+                  device: query.device,
                   todos: resultListTodos
                 },
                 function(err, html) {
