@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_ServerlessGoof_name": {
+            "value": null
+        },
+        "serverfarms_WestUS2Plan_name": {
+            "value": null
+        },
+        "components_serverlessgoof_name": {
+            "value": null
+        },
+        "databaseAccounts_serverlessgoof_name": {
+            "value": null
+        },
+        "storageAccounts_serverlessgoofstorage_name": {
+            "value": null
+        },
+        "alertrules_Failure_Anomalies___serverlessgoof_name": {
+            "value": null
+        }
+    }
+}
